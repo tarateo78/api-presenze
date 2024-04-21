@@ -1,5 +1,6 @@
 <?php
 
+
 //headers
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
@@ -14,16 +15,19 @@ $database = new Database();
 $db = $database->getConnection();
 
 $timbratura = new Timbratura($db);
-$data = json_decode(file_get_contents("php://input"));
+$dati = json_decode(file_get_contents("php://input"));
+// echo json_encode(array("message" => "cazuri"));
 
 if (
-	//!empty($data->ID) &&
-	!empty($data->Timbratura) &&
-	!empty($data->Causale)
+	//!empty($dati->ID) &&
+	!empty($dati->data) &&
+	!empty($dati->ora) &&
+	!empty($dati->causale)
 ) {
-	//$timbratura->ID = $data->ID;
-	$timbratura->Timbratura = $data->Timbratura;
-	$timbratura->Causale = $data->Causale;
+	//$timbratura->ID = $dati->ID;
+	$timbratura->data = $dati->data;
+	$timbratura->ora = $dati->ora;
+	$timbratura->causale = $dati->causale;
 
 	if ($timbratura->create()) {
 		http_response_code(201);

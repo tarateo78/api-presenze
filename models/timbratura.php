@@ -2,12 +2,13 @@
 class Timbratura
 {
 	private $conn;
-	private $table_name = "biag_timbrature";
+	private $table_name = "api_presenze";
 
 	// proprietà di una timbratura
-	public $ID;
-	public $Timbratura;
-	public $Causale;
+	public $id;
+	public $data;
+	public $ora;
+	public $causale;
 
 	// costruttore
 	public function __construct($db)
@@ -16,20 +17,39 @@ class Timbratura
 	}
 
 	// READ timbrature
-	function read($giorno)
+	function read($parametri)
 	{
-		// select all
-		$query = "SELECT a.ID, a.Timbratura, a.Causale FROM " . $this->table_name . " a ";
-		if (!is_null($giorno)) $query .= " WHERE Timbratura > :inizio AND Timbratura < :fine";
+
+		// assegno i parametri passati alle relative variabili/indice array
+		extract($parametri);
+
+		// QUERY
+		$query = "SELECT a.id, a.data, a.ora, a.causale FROM " . $this->table_name . " a ";
+		$query .= " WHERE 1 ";
+
+		// PARAMETRI
+		if (!is_null($id)) $query .= " AND id = :id ";
+		// if (!is_null($giorno)) $query .= " AND (Timbratura > :inizio AND Timbratura < :fine)";
+		// if (!is_null($annoMese)) $query .= " AND (Timbratura > :inizio AND Timbratura < :fine )";
+		$query .= " ORDER BY data DESC, ora DESC ";
+
 		$stmt = $this->conn->prepare($query);
 
-		if (!is_null($giorno)) {
-			$inizio = $giorno . " 00:00";
-			$fine = $giorno . " 23:59";
+		// BINDING
+		if (!is_null($id)) $stmt->bindParam(":id", $id);
+		// if (!is_null($giorno) || !is_null($annoMese)) {
+		// 	if (!is_null($giorno)) {
+		// 		$inizio = $giorno . " 00:00";
+		// 		$fine = substr($giorno, 0, 8) . ((int)substr($giorno, 8, 2) + 1) . " 00:00"; // giorno dopo
+		// 	}
+		// 	if (!is_null($annoMese)) {
+		// 		$inizio = $annoMese . "-01 00:00";
+		// 		$fine = substr($annoMese, 0, 5) . ((int)substr($annoMese, 5, 2) + 1) . "-01 00:00"; // mese dopo
+		// 	}
 
-			$stmt->bindParam(":inizio", $inizio);
-			$stmt->bindParam(":fine", $fine);
-		}
+		// 	$stmt->bindParam(":inizio", $inizio);
+		// 	$stmt->bindParam(":fine", $fine);
+		// }
 
 		// execute query
 		$stmt->execute();
@@ -39,47 +59,45 @@ class Timbratura
 	// CREARE timbratura
 	function create()
 	{
-		$query = "INSERT INTO " . $this->table_name . " SET Timbratura=:timbratura, Causale=:causale ";
+		$query = "INSERT INTO " . $this->table_name . " SET data=:data, ora=:ora, causale=:causale ";
 
 		$stmt = $this->conn->prepare($query);
 
 		//		$this->ID = htmlspecialchars(strip_tags($this->ID));
-		$this->Timbratura = htmlspecialchars(strip_tags($this->Timbratura));
-		$this->Causale = htmlspecialchars(strip_tags($this->Causale));
+		$this->data = htmlspecialchars(strip_tags($this->data));
+		$this->ora = htmlspecialchars(strip_tags($this->ora));
+		$this->causale = htmlspecialchars(strip_tags($this->causale));
 
 		// binding
 		// $stmt->bindParam(":ID", $this->ID);
-		$stmt->bindParam(":timbratura", $this->Timbratura);
-		$stmt->bindParam(":causale", $this->Causale);
+		$stmt->bindParam(":data", $this->data);
+		$stmt->bindParam(":ora", $this->ora);
+		$stmt->bindParam(":causale", $this->causale);
 
 		// execute query
 		if ($stmt->execute()) return true;
 		return false;
 	}
-	/*
+
+
 	// AGGIORNARE timbratura
 	function update()
 	{
 
-		$query = "UPDATE " . $this->table_name . "
-            SET
-                Titolo = :titolo,
-                Autore = :autore
-            WHERE
-                ISBN = :isbn";
+		$query = "UPDATE " . $this->table_name . " SET data = :data, ora = :ora, causale = :causale  WHERE  id = :id";
 
 		$stmt = $this->conn->prepare($query);
 
-		$this->ISBN = htmlspecialchars(strip_tags($this->ISBN));
-		$this->Autore = htmlspecialchars(strip_tags($this->Autore));
-		$this->Titolo = htmlspecialchars(strip_tags($this->Titolo));
+		$this->id = htmlspecialchars(strip_tags($this->id));
+		$this->data = htmlspecialchars(strip_tags($this->data));
+		$this->ora = htmlspecialchars(strip_tags($this->ora));
+		$this->causale = htmlspecialchars(strip_tags($this->causale));
 
-		// binding
-		$stmt->bindParam(":isbn", $this->ISBN);
-		$stmt->bindParam(":autore", $this->Autore);
-		$stmt->bindParam(":titolo", $this->Titolo);
+		$stmt->bindParam(":id", $this->id);
+		$stmt->bindParam(":data", $this->data);
+		$stmt->bindParam(":ora", $this->ora);
+		$stmt->bindParam(":causale", $this->causale);
 
-		// execute the query
 		if ($stmt->execute()) {
 			return true;
 		}
@@ -93,15 +111,15 @@ class Timbratura
 	function delete()
 	{
 
-		$query = "DELETE FROM " . $this->table_name . " WHERE ISBN = ?";
+		$query = "DELETE FROM " . $this->table_name . " WHERE ID = ?";
 
 
 		$stmt = $this->conn->prepare($query);
 
-		$this->ISBN = htmlspecialchars(strip_tags($this->ISBN));
+		$this->id = htmlspecialchars(strip_tags($this->id));
 
 
-		$stmt->bindParam(1, $this->ISBN);
+		$stmt->bindParam(1, $this->id);
 
 		// execute query
 		if ($stmt->execute()) {
@@ -110,5 +128,4 @@ class Timbratura
 
 		return false;
 	}
-	*/
 }

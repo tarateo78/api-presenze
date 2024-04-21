@@ -18,8 +18,8 @@ class Database
 			$this->password = "root";
 		} else {
 			$this->host = "localhost";
-			$this->db_name = "my_tarateo";
-			$this->username = "tarateo";
+			$this->db_name = "my_matteotarabini";
+			$this->username = "matteotarabini";
 			$this->password = "";
 		}
 	}
