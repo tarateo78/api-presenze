@@ -111,7 +111,7 @@ class Timbratura
 	function delete()
 	{
 
-		$query = "DELETE FROM " . $this->table_name . " WHERE ID = ?";
+		$query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
 
 
 		$stmt = $this->conn->prepare($query);

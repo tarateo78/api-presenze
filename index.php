@@ -1,27 +1,19 @@
-<?php
-include_once './config/database.php';
+<!DOCTYPE html>
+<html lang="en">
 
-$db = new Database();
-$conn = $db->getConnection();
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>API presenze</title>
+</head>
 
-
-echo 'php Works!';
-
-echo '<br><br>';
-
-if ($_SERVER['REMOTE_ADDR'] == "127.0.0.1" || $_SERVER['REMOTE_ADDR'] == "::1") {
-	// $sottocartella = "";
-	// $path = realpath(dirname(__FILE__) . "/..");
-	echo 'locale';
-} else {
-	// $sottocartella = "benoeditore/";
-	// $path = realpath(dirname(__FILE__) . "/..");
-	echo 'online';
-}
-
-echo '<br><br>';
-
-?>
+<body>
+	<h1>API Presenze</h1>
+	<h2>/read.php</h2>
+	<h2>/post.php</h2>
+	<h2>/update.php</h2>
+	<h2>/delete.php</h2>
+</body>
 
 
-<h1>ECCO</h1>
+</html>

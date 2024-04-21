@@ -2,9 +2,9 @@
 class Database
 {
 	// credenziali
-	private $host = "localhost";
-	private $db_name = "my_tarateo";
-	private $username = "tarateo";
+	private $host = "";
+	private $db_name = "";
+	private $username = "";
 	private $password = "";
 	public $conn;
 
